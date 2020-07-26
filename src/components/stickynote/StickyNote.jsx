@@ -1,9 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrashAlt,
   faThumbsUp,
-  faThumbsDown,
   faCircle,
   faTasks,
 } from "@fortawesome/free-solid-svg-icons";
@@ -18,24 +18,32 @@ class StickyNote extends React.Component {
   }
 
   render() {
+    const { id, createdBy, showFullName } = this.props;
     const textAreaStyle = {
       resize: "none",
     };
+    let name = createdBy;
+    if (!showFullName && createdBy.length > 6) {
+      name = createdBy.substring(0, 3) + "...";
+    }
     const { noteColor, convertToActionItem } = this.state;
-    const cardClasses = ["card"];
+    const cardClasses = ["card m-1"];
     cardClasses.push(noteColor);
     const textAreaClasses = [
       "card-text border-0 text-white md-textarea form-control",
     ];
     textAreaClasses.push(noteColor);
-    const buttonClass = ["dropdown-toggle float-right btn"];
+    const buttonClass = ["dropdown-toggle btn"];
     buttonClass.push(noteColor);
-    const headerClasses = ["card-header border-bottom "];
+    const headerClasses = ["card-header border-bottom p-0"];
     headerClasses.push("border-" + noteColor.split("-")[1]);
     return (
-      <div className={cardClasses.join(" ")}>
+      <div className={cardClasses.join(" ")} id={id}>
         <div className={headerClasses.join(" ")}>
-          <div className="dropdown">
+          <div className="float-left pl-1">
+            <span className="badge badge-primary">{name}</span>
+          </div>
+          <div className="dropdown float-right">
             <button
               className={buttonClass.join(" ")}
               data-toggle="dropdown"
@@ -110,12 +118,20 @@ class StickyNote extends React.Component {
               </a>
             </div>
           </div>
+          <div className="float-right p-1">
+            <a className="link pr-2">
+              <FontAwesomeIcon icon={faThumbsUp} size></FontAwesomeIcon>2
+            </a>
+            <a className="link">
+              <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon>
+            </a>
+          </div>
         </div>
-        <div className="card-body">
-          <div class="md-form">
+        <div className="card-body p-0">
+          <div className="md-form">
             <textarea
               className={textAreaClasses.join(" ")}
-              rows="4"
+              rows="3"
               maxLength="200"
               style={textAreaStyle}
             ></textarea>
@@ -138,23 +154,21 @@ class StickyNote extends React.Component {
               </div>
             </div>
           )}
-
-          <span class="badge badge-primary">Anyonymous</span>
-          <div className="float-right">
-            <a className="link pr-2">
-              <FontAwesomeIcon icon={faThumbsUp}></FontAwesomeIcon>2
-            </a>
-            <a className="link pr-2">
-              <FontAwesomeIcon icon={faThumbsDown}></FontAwesomeIcon>3
-            </a>
-            <a className="link">
-              <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon>
-            </a>
-          </div>
         </div>
       </div>
     );
   }
 }
+
+StickyNote.propTypes = {
+  id: PropTypes.string.isRequired,
+  createdBy: PropTypes.string,
+  showFullName: PropTypes.bool,
+};
+
+StickyNote.defaultProps = {
+  createdBy: "Anonymous",
+  showFullName: true,
+};
 
 export default StickyNote;
