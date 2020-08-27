@@ -42,7 +42,7 @@ class RetroDashboardPage extends React.Component {
       <>
         <RetroNavigationBar addSectionCallback={this.addsection} />
         <div className="card-deck border border-primary m-0">
-          {numOfSections}
+          <div className="row align-items-center m-0">{numOfSections}</div>
         </div>
       </>
     );
